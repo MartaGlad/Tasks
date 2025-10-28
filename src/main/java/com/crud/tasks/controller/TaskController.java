@@ -10,7 +10,6 @@ import java.util.List;
 @RequestMapping("/v1/tasks")
 public class TaskController {
 
-    //@RequestMapping(method = RequestMethod.GET, value = "")
     @GetMapping
     public List<TaskDto> getTasks() {
         return new ArrayList<>();
