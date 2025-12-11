@@ -1,9 +1,6 @@
 package com.crud.tasks.trello.facade;
 
-import com.crud.tasks.domain.TrelloBoard;
-import com.crud.tasks.domain.TrelloBoardDto;
-import com.crud.tasks.domain.TrelloList;
-import com.crud.tasks.domain.TrelloListDto;
+import com.crud.tasks.domain.*;
 import com.crud.tasks.mapper.TrelloMapper;
 import com.crud.tasks.service.TrelloService;
 import com.crud.tasks.trello.validator.TrelloValidator;
@@ -16,8 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TrelloFacadeTestSuite {
@@ -99,7 +97,28 @@ public class TrelloFacadeTestSuite {
                 assertFalse(trelloListDto.isClosed());
             });
         });
-
     }
 
+    @Test
+    void shouldCreateTrelloCard() {
+        //Given
+        TrelloCardDto trelloCardDto = new TrelloCardDto("name1", "desc1", "pos1", "idList1");
+        TrelloCard trelloCard = new TrelloCard("name1", "desc1", "pos1", "idList1");
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto("id1", "name1", "shortUrl1");
+        when(trelloMapper.mapToCard(any(TrelloCardDto.class))).thenReturn(trelloCard);
+        when(trelloMapper.mapToCardDto(any(TrelloCard.class))).thenReturn(trelloCardDto);
+        doNothing().when(trelloValidator).validateCard(trelloCard);
+        when(trelloService.createTrelloCard(any(TrelloCardDto.class))).thenReturn(createdTrelloCardDto);
+        //When
+        CreatedTrelloCardDto createdTrelloCardDto1 = trelloFacade.createCard(trelloCardDto);
+        //Then
+        assertNotNull(createdTrelloCardDto1);
+        assertEquals("id1", createdTrelloCardDto1.getId());
+        assertEquals(createdTrelloCardDto.getName(), createdTrelloCardDto1.getName());
+
+        verify(trelloMapper).mapToCard(trelloCardDto);
+        verify(trelloValidator).validateCard(trelloCard);
+        verify(trelloService).createTrelloCard(trelloCardDto);
+        verify(trelloMapper).mapToCardDto(trelloCard);
+    }
 }
