@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-class SimpleEmailServiceTest {
+class SimpleEmailServiceTestSuite {
 
     @InjectMocks
     private SimpleEmailService simpleEmailService;
