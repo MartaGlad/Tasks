@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 @Getter
 public class AdminConfig {
 
+    @Value("${admin.name}")
+    private String adminName;
+
     @Value("${admin.mail}")
     private String adminMail;
 
-    public String getAdminMail() {
-        return adminMail;
-    }
 }
