@@ -38,7 +38,7 @@ class EmailSchedulerTestSuite {
         emailScheduler.sendInformationEmail();
         //Then
         ArgumentCaptor<Mail> mCaptor = ArgumentCaptor.forClass(Mail.class);
-        verify((simpleEmailService), times(1)).send(mCaptor.capture());
+        verify((simpleEmailService), times(1)).sendNumberOfTasksDaily(mCaptor.capture());
         //sprawdza, czy send() zostało wywołane i zapamiętuje argument, który został przekazany
         Mail capturedMail = mCaptor.getValue();
         assertNotNull(capturedMail);
@@ -57,7 +57,7 @@ class EmailSchedulerTestSuite {
         emailScheduler.sendInformationEmail();
         //Then
         ArgumentCaptor<Mail> mCaptor = ArgumentCaptor.forClass(Mail.class);
-        verify((simpleEmailService), times(1)).send(mCaptor.capture());
+        verify((simpleEmailService), times(1)).sendNumberOfTasksDaily(mCaptor.capture());
         Mail capturedMail = mCaptor.getValue();
         assertEquals("Currently in database you got: 2 tasks.", capturedMail.getMessage());
     }

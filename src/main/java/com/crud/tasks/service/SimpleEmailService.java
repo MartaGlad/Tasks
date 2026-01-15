@@ -43,6 +43,27 @@ public class SimpleEmailService {
         }
     }
 
+    private MimeMessagePreparator createMimeMessageForNumberOfTasks(final Mail mail) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildTaskNumberEmail(mail.getMessage()), true);
+        };
+    }
+
+    public void sendNumberOfTasksDaily(final Mail mail) throws MailException {
+        log.info("Starting e-mail preparation...");
+        try {
+            javaMailSender.send(createMimeMessageForNumberOfTasks(mail));
+            log.info("E-mail has been sent.");
+        } catch (MailException e) {
+            log.error("Failed to process e-mail sending: " + e.getMessage(), e);
+        }
+    }
+
+
+
     /*public void send(final Mail mail) throws MailException {
         log.info("Starting e-mail preparation...");
         try {
